@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Khabar</string>
+    <string name="Back_Button">Back button</string>
+    <string name="LOADING">loading…</string>
+    <string name="RETRY">Retry</string>
+    <string name="NO_INTERNET_CONNECTION">No internet connection!</string>
+    <string name="VIEW_NEWS_OFFLINE">View News Offline</string>
+    <string name="NO_DATA_FOUND">No data found</string>
 </resources>
