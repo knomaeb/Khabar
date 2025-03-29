@@ -27,5 +27,7 @@ data class BookmarkHeadline(
     override val imageUrl: String,
     @ColumnInfo(name = "publishedAt")
     override val publishedAt: String,
-    @Embedded override val source: SourceEntity
+    @Embedded override val source: SourceEntity,
+    @ColumnInfo(name = "content")
+    override val content: String
 ): HeadlineContract

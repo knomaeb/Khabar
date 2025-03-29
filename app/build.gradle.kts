@@ -107,4 +107,12 @@ dependencies {
     implementation(libs.androidx.room.guava)
     testImplementation(libs.androidx.room.testing)
     implementation(libs.androidx.room.paging)
+
+    // paging
+    implementation(libs.androidx.paging.runtime)
+    testImplementation(libs.androidx.paging.common)
+    implementation(libs.androidx.paging.rxjava2)
+    implementation(libs.androidx.paging.rxjava3)
+    implementation(libs.androidx.paging.guava)
+    implementation(libs.androidx.paging.compose)
 }

@@ -24,7 +24,9 @@ data class CacheHeadline(
     override val imageUrl: String,
     @ColumnInfo(name = "publishedAt")
     override val publishedAt: String,
-    @Embedded override val source: SourceEntity
+    @Embedded override val source: SourceEntity,
+    @ColumnInfo(name = "content")
+    override val content: String
 ) : HeadlineContract
 
 fun CacheHeadline.toHeadline(): Headline {
@@ -35,6 +37,7 @@ fun CacheHeadline.toHeadline(): Headline {
         description = description,
         imageUrl = imageUrl,
         publishedAt = publishedAt,
-        source = source.toSource()
+        source = source.toSource(),
+        content = content
     )
 }

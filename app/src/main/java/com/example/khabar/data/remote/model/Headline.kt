@@ -10,12 +10,20 @@ import kotlinx.serialization.Serializable
 data class Headline(
     @SerialName("author")
     override val author: String = "",
+    @SerialName("title")
     override val title: String = "",
+    @SerialName("description")
     override val description: String = "",
+    @SerialName("url")
     override val url: String = "",
+    @SerialName("urlToImage")
     override val imageUrl: String = "",
+    @SerialName("publishedAt")
     override val publishedAt: String = "",
-    override val source: Source
+    @SerialName("source")
+    override val source: Source,
+    @SerialName("content")
+    override val content: String
 ): HeadlineContract
 
 fun Headline.toBookmarkHeadline(): BookmarkHeadline {
@@ -26,7 +34,8 @@ fun Headline.toBookmarkHeadline(): BookmarkHeadline {
         description = description,
         imageUrl = imageUrl,
         publishedAt = publishedAt,
-        source = source.toSourceEntity()
+        source = source.toSourceEntity(),
+        content = content
     )
 }
 
@@ -38,6 +47,7 @@ fun Headline.toCacheHeadline(): CacheHeadline {
         description = description,
         imageUrl = imageUrl,
         publishedAt = publishedAt,
-        source = source.toSourceEntity()
+        source = source.toSourceEntity(),
+        content = content
     )
 }

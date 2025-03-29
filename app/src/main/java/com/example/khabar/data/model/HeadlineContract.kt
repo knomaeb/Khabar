@@ -2,6 +2,7 @@ package com.example.khabar.data.model
 
 interface HeadlineContract {
     val author: String
+    val content: String
     val title: String
     val description: String
     val url: String
