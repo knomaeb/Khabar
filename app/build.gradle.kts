@@ -115,4 +115,7 @@ dependencies {
     implementation(libs.androidx.paging.rxjava3)
     implementation(libs.androidx.paging.guava)
     implementation(libs.androidx.paging.compose)
+
+    // browser
+    implementation(libs.browser)
 }

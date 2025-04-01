@@ -2,6 +2,7 @@ package com.example.khabar.di.module
 
 import android.content.Context
 import androidx.room.Room
+import androidx.browser.customtabs.CustomTabsIntent
 import com.example.khabar.data.local.AppDatabase
 import com.example.khabar.data.local.AppDatabaseService
 import com.example.khabar.data.local.DatabaseService
@@ -32,6 +33,12 @@ class ApplicationModule {
     @Provides
     fun provideNetworkConnected(@ApplicationContext context: Context): NetworkConnected{
         return NetworkConnected(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCustomTabIntent() : CustomTabsIntent{
+        return CustomTabsIntent.Builder().build()
     }
 
     @BaseUrl

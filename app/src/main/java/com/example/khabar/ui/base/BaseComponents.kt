@@ -1,6 +1,5 @@
-package com.example.khabar.presentation.base
+package com.example.khabar.ui.base
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -72,17 +71,6 @@ fun IconButton(
             .clickable{ onClick() },
         imageVector = drawablePainter,
         contentDescription = contentDescription
-    )
-}
-
-@Composable
-fun TextButton(modifier: Modifier, text: String, onClick: ClickHandler) {
-    Text(
-        modifier = modifier
-            .padding(8.dp)
-            .clickable { onClick() },
-        text = text,
-        fontSize = 24.sp
     )
 }
 
@@ -180,12 +168,6 @@ fun IconButtonPreview() {
         drawablePainter = Icons.Default.Notifications,
         contentDescription = ""
     ) {}
-}
-
-@Preview
-@Composable
-fun TextButtonPreview() {
-    TextButton(modifier = Modifier, text = "Text Button") {}
 }
 
 @Preview(showBackground = true)

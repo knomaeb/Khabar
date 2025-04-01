@@ -6,4 +6,7 @@
     <string name="NO_INTERNET_CONNECTION">No internet connection!</string>
     <string name="VIEW_NEWS_OFFLINE">View News Offline</string>
     <string name="NO_DATA_FOUND">No data found</string>
+    <string name="home">Home</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="settings">Setting</string>
 </resources>

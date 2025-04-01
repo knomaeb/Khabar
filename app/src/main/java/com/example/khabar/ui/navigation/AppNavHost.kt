@@ -1,4 +1,4 @@
-package com.example.khabar.presentation.navigation
+package com.example.khabar.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.composable

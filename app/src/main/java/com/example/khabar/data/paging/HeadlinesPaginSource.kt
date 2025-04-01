@@ -34,26 +34,18 @@ class HeadlinesPagingSource(
                     )
                 }
 
-                is HeadlineQuery.BySource -> {
-                    networkService.getHeadlinesBySource(
-                        sourceId = query.sourceId,
-                        page = position,
-                        pageSize = params.loadSize
-                    )
-                }
-
-                is HeadlineQuery.ByLanguage -> {
-                    networkService.getHeadlinesByLanguage(
-                        countryCode = query.countryCode,
-                        languageCode = query.languageCode,
-                        page = position,
-                        pageSize = params.loadSize
-                    )
-                }
 
                 is HeadlineQuery.BySearch -> {
                     networkService.search(
                         query = query.query,
+                        page = position,
+                        pageSize = params.loadSize
+                    )
+                }
+
+                is HeadlineQuery.ByCategory -> {
+                    networkService.getHeadlinesByCategory(
+                        category = query.category,
                         page = position,
                         pageSize = params.loadSize
                     )

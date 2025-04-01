@@ -1,4 +1,4 @@
-package com.example.khabar.presentation.base
+package com.example.khabar.ui.base
 
 typealias ClickHandler = () -> Unit
 typealias RetryHandler = () -> Unit

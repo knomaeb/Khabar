@@ -1,4 +1,4 @@
-package com.example.khabar
+package com.example.khabar.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
