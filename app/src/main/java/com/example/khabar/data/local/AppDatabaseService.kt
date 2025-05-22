@@ -1,44 +1,44 @@
 package com.example.khabar.data.local
 
-import com.example.khabar.data.local.entity.BookmarkHeadline
-import com.example.khabar.data.local.entity.toHeadline
-import com.example.khabar.data.remote.model.Headline
-import com.example.khabar.data.remote.model.toBookmarkHeadline
-import com.example.khabar.data.remote.model.toCacheHeadline
+import com.example.khabar.data.local.entity.Article
+import com.example.khabar.data.local.entity.articleToSavedArticleEntity
+import com.example.khabar.data.local.entity.savedArticleEntityToArticle
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AppDatabaseService @Inject constructor(private val appDatabase: AppDatabase) :
-DatabaseService {
-    override fun getCachedHeadlines(): Flow<List<Headline>> {
-        return appDatabase.cacheHeadlinesDao().getAll().map { headlines ->
-            headlines.map { it.toHeadline() }
+    DatabaseService {
+    override suspend fun upsert(article: Article) {
+        return appDatabase.getSavedArticleDao().add(article.articleToSavedArticleEntity())
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override suspend fun getSavedArticles(): Flow<List<Article>> {
+        return appDatabase.getSavedArticleDao().getSavedArticles().flatMapConcat {
+            flow {
+                val list = mutableListOf<Article>()
+                it.forEach { SavedArticleEntity ->
+                    list.add(SavedArticleEntity.savedArticleEntityToArticle())
+                }
+                emit(list)
+            }
         }
     }
 
-    override fun deleteAllAndInsertAllToCache(headlines: List<Headline>) {
-        val headlineCacheList = headlines.map { it.toCacheHeadline() }
-        appDatabase.cacheHeadlinesDao().deleteAllAndInsertAll(headlineCacheList)
+    override suspend fun deleteArticle(article: Article) {
+        return appDatabase.getSavedArticleDao().remove(article.articleToSavedArticleEntity())
     }
 
-    override fun cacheAll(headlines: List<Headline>) {
-        val headlineCacheList = headlines.map { it.toCacheHeadline() }
-        appDatabase.cacheHeadlinesDao().addAll(headlineCacheList)
+    override fun getAllArticles(): Flow<List<Article>> {
+        return appDatabase.getArticleDao().getAll()
     }
 
-    override fun getBookmarkedHeadlines(): Flow<List<BookmarkHeadline>> {
-        return appDatabase.bookmarkHeadlinesDao().getAll()
-    }
-
-    override fun bookmarkHeadline(headline: Headline) {
-        val bookmarkHeadline = headline.toBookmarkHeadline()
-        appDatabase.bookmarkHeadlinesDao().add(bookmarkHeadline)
-    }
-
-    override fun removeFromBookmarkedHeadlines(headline: BookmarkHeadline) {
-        appDatabase.bookmarkHeadlinesDao().remove(headline)
+    override fun deleteAllAndInsertAll(articles: List<Article>) {
+        appDatabase.getArticleDao().deleteAllAndInsertAll(articles)
     }
 }

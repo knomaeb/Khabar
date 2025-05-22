@@ -1,19 +1,20 @@
 package com.example.khabar.data.local
 
-import com.example.khabar.data.local.entity.BookmarkHeadline
-import com.example.khabar.data.remote.model.Headline
+import com.example.khabar.data.local.entity.Article
 import kotlinx.coroutines.flow.Flow
 
 interface DatabaseService {
-    fun getCachedHeadlines(): Flow<List<Headline>>
 
-    fun deleteAllAndInsertAllToCache(headlines: List<Headline>)
+    //Saving News
+    suspend fun upsert(article: Article)
 
-    fun cacheAll(headlines: List<Headline>)
+    suspend fun getSavedArticles(): Flow<List<Article>>
 
-    fun getBookmarkedHeadlines(): Flow<List<BookmarkHeadline>>
+    suspend fun deleteArticle(article: Article)
 
-    fun bookmarkHeadline(headline: Headline)
+    //Caching News
+    fun getAllArticles(): Flow<List<Article>>
 
-    fun removeFromBookmarkedHeadlines(headline: BookmarkHeadline)
+    fun deleteAllAndInsertAll(articles: List<Article>)
+
 }
