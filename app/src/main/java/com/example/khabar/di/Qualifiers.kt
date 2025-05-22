@@ -1,4 +1,4 @@
-package com.example.khabar.di.module
+package com.example.khabar.di
 
 import javax.inject.Qualifier
 
