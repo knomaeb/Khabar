@@ -1,6 +1,7 @@
 package com.example.khabar.data.model
 
-data class Language(
+data class Country(
     val code: String,
     val name: String,
+    val flag: String
 )
