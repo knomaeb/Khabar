@@ -1,18 +1,20 @@
 package com.example.khabar.data.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import com.example.khabar.core.dispatcher.DispatcherProvider
+import com.example.khabar.core.utils.AppConstants.DEFAULT_PAGE_NUM
+import com.example.khabar.core.utils.CountryHelper
+import com.example.khabar.core.utils.LanguageHelper
 import com.example.khabar.data.local.DatabaseService
-import com.example.khabar.data.local.entity.BookmarkHeadline
-import com.example.khabar.data.model.HeadlineQuery
-import com.example.khabar.data.paging.HeadlinesPagingSource
+import com.example.khabar.data.local.entity.Article
+import com.example.khabar.data.local.entity.Source
+import com.example.khabar.data.model.Country
+import com.example.khabar.data.model.Language
+import com.example.khabar.data.model.apiArticleListToArticleList
+import com.example.khabar.data.model.apiSourceListToSourceList
 import com.example.khabar.data.remote.NetworkService
-import com.example.khabar.data.remote.model.Headline
-import com.example.khabar.utils.AppConstants.PAGE_SIZE
-import com.example.khabar.utils.DispatcherProvider
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(
@@ -20,45 +22,104 @@ class MainRepository @Inject constructor(
     private val databaseService: DatabaseService,
     private val dispatcherProvider: DispatcherProvider
 ) {
-    fun getHeadlinesByCountry(countryCode: String): Flow<PagingData<Headline>>{
-        return getHeadlines(HeadlineQuery.ByCountry(countryCode))
+
+    suspend fun getNews(pageNumber: Int = DEFAULT_PAGE_NUM): List<Article> {
+        val articles = networkService.getNews(
+            pageNum = pageNumber
+        ).articles.apiArticleListToArticleList()
+        return if (pageNumber == DEFAULT_PAGE_NUM) {
+            databaseService.deleteAllAndInsertAll(articles)
+            databaseService.getAllArticles().first()
+        } else {
+            articles
+        }
     }
 
-    fun getHeadlinesByCategory(category: String): Flow<PagingData<Headline>>{
-        return getHeadlines(HeadlineQuery.ByCategory(category = category))
+    suspend fun getNewsFromDb(): List<Article> {
+        return databaseService.getAllArticles().first()
     }
 
-    fun search(query: String): Flow<PagingData<Headline>> {
-        return getHeadlines(HeadlineQuery.BySearch(query = query))
+    fun getNewsByCountry(
+        countryCode: String,
+        pageNumber: Int = DEFAULT_PAGE_NUM
+    ): Flow<List<Article>> = flow {
+        emit(
+            networkService.getNews(
+                countryCode,
+                pageNum = pageNumber
+            ).articles.apiArticleListToArticleList()
+        )
     }
 
-    private fun getHeadlines(headlineQuery: HeadlineQuery): Flow<PagingData<Headline>> {
-        return Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE),
-            pagingSourceFactory = {
-                HeadlinesPagingSource(
-                    networkService = networkService,
-                    databaseService = databaseService,
-                    dispatcherProvider = dispatcherProvider,
-                    query = headlineQuery
-                )
-            }
-        ).flow
+    fun getNewsByCategory(
+        category: String,
+        pageNumber: Int = DEFAULT_PAGE_NUM
+    ): Flow<List<Article>> = flow {
+        emit(
+            networkService.getNewsByCategory(
+                category,
+                pageNum = pageNumber
+            ).articles.apiArticleListToArticleList()
+        )
     }
 
-    suspend fun getCachedHeadlines(): Flow<List<Headline>> {
-        return withContext(dispatcherProvider.io) { databaseService.getCachedHeadlines() }
+    fun getNewsByLanguage(
+        languageCode: String,
+        pageNumber: Int = DEFAULT_PAGE_NUM
+    ): Flow<List<Article>> = flow {
+        emit(
+            networkService.getNewsByLang(
+                languageCode,
+                pageNum = pageNumber
+            ).articles.apiArticleListToArticleList()
+        )
     }
 
-    suspend fun bookmarkHeadline(headline: Headline) {
-        withContext(dispatcherProvider.io) { databaseService.bookmarkHeadline(headline = headline) }
+    fun getNewsBySource(
+        sourceCode: String,
+        pageNumber: Int = DEFAULT_PAGE_NUM
+    ): Flow<List<Article>> = flow {
+        emit(
+            networkService.getNewsBySource(
+                sourceCode,
+                pageNum = pageNumber
+            ).articles.apiArticleListToArticleList()
+        )
     }
 
-    suspend fun removeFromBookmarkedHeadlines(headline: BookmarkHeadline) {
-        withContext(dispatcherProvider.io) { databaseService.removeFromBookmarkedHeadlines(headline = headline) }
+    fun searchNews(
+        searchQuery: String,
+        pageNumber: Int = DEFAULT_PAGE_NUM
+    ): Flow<List<Article>> =
+        flow {
+            emit(
+                networkService.searchNews(
+                    searchQuery,
+                    pageNumber
+                ).articles.apiArticleListToArticleList()
+            )
+        }
+
+    suspend fun upsert(article: Article) {
+        databaseService.upsert(article)
     }
 
-    suspend fun getBookmarkedHeadlines(): Flow<List<BookmarkHeadline>> {
-        return withContext(dispatcherProvider.io) { databaseService.getBookmarkedHeadlines() }
+    suspend fun getSavedNews(): Flow<List<Article>> = databaseService.getSavedArticles()
+
+    suspend fun deleteArticle(article: Article) = databaseService.deleteArticle(article)
+
+    fun getSources(): Flow<List<Source>> = flow {
+        emit(
+            networkService.getSources().sources.apiSourceListToSourceList()
+        )
     }
+
+    fun getCountries(): Flow<List<Country>> = flow {
+        emit(CountryHelper.countries)
+    }
+
+    fun getLanguages(): Flow<List<Language>> = flow {
+        emit(LanguageHelper.languages)
+    }
+
 }
