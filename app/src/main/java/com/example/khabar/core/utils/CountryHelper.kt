@@ -1,10 +1,9 @@
-package com.example.khabar.utils
+package com.example.khabar.core.utils
 
-import com.example.khabar.data.model.CountriesResponse
 import com.example.khabar.data.model.Country
 
 object CountryHelper {
-    private val countries = listOf(
+    val countries = listOf(
         Country("AR", "Argentina", "🇦🇷"),
         Country("AU", "Australia", "🇦🇺"),
         Country("AT", "Austria", "🇦🇹"),
@@ -61,25 +60,4 @@ object CountryHelper {
         Country("US", "United States", "🇺🇸"),
         Country("VE", "Venezuela", "🇻🇪")
     )
-
-    fun getCountries(): CountriesResponse {
-        return CountriesResponse(
-            pageSize = countries.size,
-            pageNo = 1,
-            totalItems = countries.size,
-            countries = countries
-        )
-    }
-
-    fun getCountries(pageSize: Int, pageNo: Int): CountriesResponse {
-        val totalItems = countries.size
-        val fromIndex = pageSize * (pageNo - 1)
-        if (fromIndex >= totalItems) {
-            return CountriesResponse(pageSize, pageNo, totalItems, emptyList())
-        }
-        val toIndex = minOf(fromIndex + pageSize, totalItems)
-        val paginatedCountries = countries.subList(fromIndex, toIndex)
-        return CountriesResponse(pageSize, pageNo, totalItems, paginatedCountries)
-    }
-
 }

@@ -1,4 +1,4 @@
-package com.example.khabar.utils
+package com.example.khabar.core.utils
 
 import com.example.khabar.data.model.Category
 
