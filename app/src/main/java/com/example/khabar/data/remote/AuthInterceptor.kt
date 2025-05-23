@@ -1,6 +1,6 @@
 package com.example.khabar.data.remote
 
-import com.example.khabar.di.module.ApiKey
+import com.example.khabar.di.ApiKey
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject

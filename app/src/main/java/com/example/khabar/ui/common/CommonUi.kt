@@ -1,11 +1,13 @@
-package com.example.khabar.ui.base
+package com.example.khabar.ui.common
 
+import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,8 +15,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -24,17 +26,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.DialogProperties
 import com.example.khabar.R
+import com.example.khabar.ui.base.ClickHandler
+import com.example.khabar.ui.base.RetryHandler
 
 @Composable
-fun PrimaryButton(modifier: Modifier, text: String, onClick: ClickHandler){
+fun PrimaryButton(modifier: Modifier, text: String, onClick: ClickHandler) {
     Button(
         modifier = modifier
             .fillMaxWidth()
@@ -45,7 +50,7 @@ fun PrimaryButton(modifier: Modifier, text: String, onClick: ClickHandler){
 }
 
 @Composable
-fun BackButton(onClick: ClickHandler){
+fun BackButton(onClick: ClickHandler) {
     IconButton(
         modifier = Modifier,
         onClick = onClick,
@@ -61,15 +66,15 @@ fun BackButton(onClick: ClickHandler){
 @Composable
 fun IconButton(
     modifier: Modifier,
-    drawablePainter: ImageVector,
+    drawablePainter: Painter,
     contentDescription: String,
     onClick: ClickHandler
-){
+) {
     Icon(
         modifier = modifier
             .padding(8.dp)
-            .clickable{ onClick() },
-        imageVector = drawablePainter,
+            .clickable { onClick() },
+        painter = drawablePainter,
         contentDescription = contentDescription
     )
 }
@@ -148,6 +153,28 @@ fun NoDataFound(modifier: Modifier) {
     }
 }
 
+@Composable
+fun WebViewPage(
+    url: String,
+    modifier: Modifier = Modifier
+) {
+    AndroidView(
+        factory = {
+            WebView(it).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                webViewClient = WebViewClient()
+                loadUrl(url)
+            }
+        }, update = {
+            it.loadUrl(url)
+        },
+        modifier = modifier
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PrimaryButtonPreview() {
@@ -158,16 +185,6 @@ fun PrimaryButtonPreview() {
 @Composable
 fun BackButtonPreview() {
     BackButton(onClick = {})
-}
-
-@Preview(showBackground = true)
-@Composable
-fun IconButtonPreview() {
-    IconButton(
-        modifier = Modifier,
-        drawablePainter = Icons.Default.Notifications,
-        contentDescription = ""
-    ) {}
 }
 
 @Preview(showBackground = true)
@@ -185,7 +202,8 @@ fun ProgressLoadingPreview() {
 @Preview
 @Composable
 fun ApiRetryAlertPreview() {
-    ShowErrorDialog(header = "Error title",
+    ShowErrorDialog(
+        header = "Error title",
         message = "Error message",
         onRetryClick = { /* Retry logic */ })
 }

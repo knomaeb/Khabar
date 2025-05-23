@@ -1,4 +1,4 @@
-package com.example.khabar.ui.components
+package com.example.khabar.ui.screens.home.composables
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -4,20 +4,17 @@ import kotlinx.serialization.Serializable
 
 sealed class Destinations {
     @Serializable
-    object NewsList
+    data object TopNews : Destinations()
 
     @Serializable
-    object SearchNews
-
-//    @Serializable
-//    data class NewsDetails(val news: NewsUiModel)
+    data object SearchNews : Destinations()
 
     @Serializable
-    data object Favorites
-
-    @Serializable
-    object Settings
-
-    @Serializable
-    object Language
+    data object SavedNews : Destinations()
 }
+
+val bottomBarScreens = listOf(
+    Destinations.TopNews,
+    Destinations.SearchNews,
+    Destinations.SavedNews
+)

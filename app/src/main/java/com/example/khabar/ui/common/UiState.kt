@@ -1,9 +1,11 @@
-package com.example.khabar.ui.base
+package com.example.khabar.ui.common
 
 sealed interface UiState<out T> {
     data class Success<T>(val data: T) : UiState<T>
 
     data class Error(val message: String) : UiState<Nothing>
 
-    data object Loading : UiState<Nothing>
+    object Loading : UiState<Nothing>
+
+    object Empty : UiState<Nothing>
 }

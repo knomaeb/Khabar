@@ -23,11 +23,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    val localProperties = Properties()
-    val localPropertiesFile = File(rootDir ,"secret.properties")
+    val localProps = Properties()
+    val localPropertiesFile = File(rootProject.rootDir, "gradle.properties")
     if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
         localPropertiesFile.inputStream().use {
-            localProperties.load(it)
+            localProps.load(it)
         }
     }
 
@@ -38,11 +38,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "API_KEY", localProperties.getProperty("API_KEY"))
         }
 
         debug {
-            buildConfigField("String", "API_KEY", localProperties.getProperty("API_KEY"))
+            buildConfigField("String", "API_KEY", localProps.getProperty("API_KEY"))
         }
     }
     compileOptions {
@@ -83,12 +82,19 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.compose)
 
+    // Serialization
     implementation(libs.serialization)
 
-    // retrofil & okhttp
+    // Extended Icon
+    implementation(libs.androidx.material.icons.extended)
+
+    // retrofit & okhttp
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter)
     implementation(libs.okhttp3)
+
+    // Gson converter factory
+    implementation(libs.converter.gson)
 
     // dagger & hilt
     ksp(libs.hilt.compiler)
@@ -118,4 +124,13 @@ dependencies {
 
     // browser
     implementation(libs.browser)
+
+    //Gson
+    implementation(libs.gson)
+
+    //Navigation Compose
+    implementation(libs.androidx.navigation.compose)
+
+    // extended icon
+    implementation(libs.androidx.material.icons.extended)
 }

@@ -1,4 +1,4 @@
-package com.example.khabar.utils
+package com.example.khabar.core.dispatcher
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
