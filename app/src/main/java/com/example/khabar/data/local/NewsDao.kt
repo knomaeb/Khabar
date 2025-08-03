@@ -1,0 +1,23 @@
+package com.example.khabar.data.local
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface NewsDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(news: NewsEntity)
+
+    @Delete
+    suspend fun delete(news: NewsEntity)
+
+    @Query("SELECT * FROM favourite_news")
+    fun getAll(): Flow<List<NewsEntity>>
+
+    @Query("SELECT EXISTS(SELECT * FROM favourite_news WHERE title = :title)")
+    fun isFavorite(title: String): Flow<Boolean>
+}
