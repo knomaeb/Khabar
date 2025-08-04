@@ -1,6 +1,6 @@
 package com.example.khabar.domain.repository
 
-import com.example.khabar.data.model.News
+import com.example.khabar.domain.model.News
 import kotlinx.coroutines.flow.Flow
 
 interface FavouriteRepository {
