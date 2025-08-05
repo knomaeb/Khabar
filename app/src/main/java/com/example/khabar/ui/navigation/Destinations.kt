@@ -1,20 +1,24 @@
 package com.example.khabar.ui.navigation
 
+import com.example.khabar.ui.common.NewsUiModel
 import kotlinx.serialization.Serializable
 
 sealed class Destinations {
     @Serializable
-    data object TopNews : Destinations()
+    data object NewsList
 
     @Serializable
-    data object SearchNews : Destinations()
+    data object SearchNews
 
     @Serializable
-    data object SavedNews : Destinations()
+    data class NewsDetails(val news: NewsUiModel)
+
+    @Serializable
+    data object Favourites
+
+    @Serializable
+    object Settings
+
+    @Serializable
+    object Language
 }
-
-val bottomBarScreens = listOf(
-    Destinations.TopNews,
-    Destinations.SearchNews,
-    Destinations.SavedNews
-)

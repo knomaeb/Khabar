@@ -19,18 +19,18 @@ enum class BottomNavigation(
         label = "Home",
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home,
-        route = Destinations.TopNews
-    ),
-    Favorites(
-        label = "Saved",
-        selectedIcon = Icons.Filled.Bookmark,
-        unselectedIcon = Icons.Outlined.Bookmark,
-        route = Destinations.SavedNews
+        route = Destinations.NewsList
     ),
     Search(
         label = "Search",
         selectedIcon = Icons.Filled.Search,
         unselectedIcon = Icons.Outlined.Search,
         route = Destinations.SearchNews
+    ),
+    Favorites(
+        label = "Saved",
+        selectedIcon = Icons.Filled.Bookmark,
+        unselectedIcon = Icons.Outlined.Bookmark,
+        route = Destinations.Favourites
     )
 }

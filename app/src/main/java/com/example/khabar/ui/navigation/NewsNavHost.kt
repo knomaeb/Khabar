@@ -1,22 +1,18 @@
 package com.example.khabar.ui.navigation
 
-import android.content.Context
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import com.example.khabar.ui.common.NewsUiModel
+import com.example.khabar.ui.common.NewsUiModelParameterType
+import com.example.khabar.ui.details.NewsDetailsScreen
+import com.example.khabar.ui.favourite.FavouritesScreen
+import com.example.khabar.ui.home.components.HomeScreen
+import com.example.khabar.ui.search.SearchNewsScreen
+import kotlin.reflect.typeOf
 
 @Composable
 fun NewsNavHost(
@@ -26,39 +22,31 @@ fun NewsNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = Destinations.TopNews
+        startDestination = Destinations.NewsList
     ) {
-        composable<Destinations.TopNews> { }
-        composable<Destinations.SearchNews> {}
-        composable<Destinations.SavedNews> {}
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun NewsTopBar(onBackClick: () -> Unit) {
-    TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary
-        ),
-        title = {
-            Text(text = "Khabar")
-        },
-        navigationIcon = {
-            IconButton(
-                onClick = { onBackClick() }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBackIosNew,
-                    contentDescription = null
-                )
-            }
+        composable<Destinations.NewsList> {
+            HomeScreen(
+                navController = navController
+            )
         }
-    )
-}
-
-
-fun openCustomChromeTab(customTabsIntent: CustomTabsIntent, context: Context, url: String) {
-    customTabsIntent.launchUrl(context, url.toUri())
+        composable<Destinations.NewsDetails>(
+            typeMap = mapOf(typeOf<NewsUiModel>() to NewsUiModelParameterType)
+        ) { backStackEntry ->
+            val news = backStackEntry.toRoute<Destinations.NewsDetails>().news
+            NewsDetailsScreen(
+                news = news,
+                navController = navController
+            )
+        }
+        composable<Destinations.Favourites> {
+            FavouritesScreen(
+                navController = navController
+            )
+        }
+        composable<Destinations.SearchNews> {
+            SearchNewsScreen(
+                navController = navController
+            )
+        }
+    }
 }
