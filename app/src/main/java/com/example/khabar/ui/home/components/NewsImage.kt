@@ -1,4 +1,4 @@
-package com.example.khabar.ui.screens.home.composables
+package com.example.khabar.ui.home.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -19,14 +19,14 @@ import com.example.khabar.R
 @Composable
 fun NewsImage(
     imageUrl: String,
-){
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp, start = 16.dp, end = 16.dp)
             .aspectRatio(16f / 9f)
             .clip(RoundedCornerShape(8.dp))
-    ){
+    ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(imageUrl)
@@ -43,7 +43,7 @@ fun NewsImage(
 
 @Preview(showBackground = true)
 @Composable
-private fun NewsImagePreview(){
+private fun NewsImagePreview() {
     NewsImage(
         imageUrl = "https://d.newswek.com/en/full/2616963/florida-wisconsin-elections-what-know.png",
     )
