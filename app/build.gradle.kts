@@ -7,11 +7,12 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.serialization)
+    id("kotlin-parcelize")
 }
 
 android {
     namespace = "com.example.khabar"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.khabar"
@@ -24,7 +25,7 @@ android {
     }
 
     val localProps = Properties()
-    val localPropertiesFile = File(rootProject.rootDir, "gradle.properties")
+    val localPropertiesFile = File(rootProject.rootDir, "local.properties")
     if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
         localPropertiesFile.inputStream().use {
             localProps.load(it)
@@ -92,6 +93,7 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.converter)
     implementation(libs.okhttp3)
+    implementation(libs.logging.interceptor)
 
     // Gson converter factory
     implementation(libs.converter.gson)
@@ -133,4 +135,7 @@ dependencies {
 
     // extended icon
     implementation(libs.androidx.material.icons.extended)
+
+    // google font
+    implementation(libs.androidx.ui.text.google.fonts)
 }
